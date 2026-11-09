@@ -115,7 +115,7 @@ deploys (default `preview`), then runs issue → redeem → rejected double spen
 
 ## Deployed on the public Midnight `preview` network (Nov 6, 2026)
 
-> **Status, Nov 9, 2026:** Midnight's public preview network was reset around Nov 7, 2026 (block heights restarted) and now runs ledger 9.1. The contracts deployed on Nov 6 no longer exist there. The results below are the record of that run; the transactions can no longer be looked up. The deployment scripts are pinned to ledger 8, so a new deployment needs them moved to ledger 9 first. The contract and its tests are unaffected.
+> **Status, Nov 9, 2026:** Midnight's public preview network was reset around Nov 7, 2026 (block heights restarted) and now runs ledger 9.1. The contracts deployed on Nov 6 no longer exist there. The results below are the record of that run; the transactions can no longer be looked up. The deployment scripts are pinned to ledger 8, so a new deployment needs them moved to ledger 9 first. Checked on a fresh clone the same day: the contract compiles with real ZK keys on Compact 0.36.0 (4 circuits), and all 21 tests pass.
 Contract **`152c84984494587b0a2b58b3ab2e17eae612c1be5ce7c8fc254bfdf7134056b3`** (deployed with `deploy/src/deploy.mjs`, real proofs, Compact 0.31.1 / ledger 8).
 
 | Step | Block on preview |
