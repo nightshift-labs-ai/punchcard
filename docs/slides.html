@@ -40,7 +40,7 @@ img{max-width:100%;max-height:470px;border-radius:12px;border:1px solid #2a3060}
 <li class="g">✔ only the operator can <code>issue()</code> / <code>withdraw()</code>; <code>buy()</code> must pay N × price NIGHT</li></ul>
 <p class="m">21 tests (16 contract + 5 HTTP paywall) cover every rule plus unlinkability, front-running, request binding and concurrent replays — all passing.</p></div>
 
-<div class="s"><h2>Ran on the public Midnight preview network (Nov 6)</h2><p class="m" style="font-size:20px;margin:0 0 10px">Preview was reset around Nov 7, so these contracts are no longer on chain; this is the recorded run.</p><table>
+<div class="s"><h2>Ran on Midnight preview (Nov 6)</h2><p class="m" style="font-size:20px;margin:0 0 10px">Preview was reset around Nov 7, so these contracts are no longer on chain; this is the recorded run.</p><table>
 <tr><th>Step (real ZK proofs, preview network)</th><th>Result</th></tr>
 <tr><td>deploy, price 1000 / credit</td><td class="g">contract 152c8498…56b3</td></tr>
 <tr><td><code>issue(ownerTag, 3)</code></td><td class="g">block 1618076</td></tr>
@@ -49,7 +49,7 @@ img{max-width:100%;max-height:470px;border-radius:12px;border:1px solid #2a3060}
 <tr><td><code>redeem</code> credit #1</td><td class="g">block 1618085</td></tr>
 <tr><td><code>buy(ownerTag, 2)</code> paying 2000 NIGHT units</td><td class="g">block 1618089</td></tr>
 <tr><td><code>withdraw(1500)</code> (in-circuit balance check)</td><td class="g">block 1618093</td></tr></table>
-<p class="m" style="font-size:20px">Also on preview (contract 6ba402…) and a local chain: HTTP paywall reading the indexer: 402 → on-chain redeem → <span class="g">200</span>; two concurrent copies → one 200; ticket replayed without the claim → 402; replay → 403.<br>Live chain view (decodes the deployed ledger from the public indexer in your browser): punchcard-demo.nightshift-labs.workers.dev/live — contract balance 500 NIGHT units = 2000 bought − 1500 withdrawn.</p></div>
+<p class="m" style="font-size:20px">Also on preview (contract 6ba402…) and a local chain: HTTP paywall reading the indexer: 402 → on-chain redeem → <span class="g">200</span>; two concurrent copies → one 200; ticket replayed without the claim → 402; replay → 403.<br>Chain view of the recorded run (decodes the deployed ledger from the public indexer in your browser): punchcard-demo.nightshift-labs.workers.dev/live — contract balance 500 NIGHT units = 2000 bought − 1500 withdrawn.</p></div>
 
 <div class="s"><h2>Demo</h2><img src="demo-ui.png"><p class="m" style="font-size:20px">Live: punchcard-demo.nightshift-labs.workers.dev — the compiled contract running in the browser (local Midnight simulator), with three "try to cheat" buttons.</p></div>
 
