@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Punchcard — live on the Midnight preview network</title>
+<title>Punchcard on the Midnight preview network</title>
 <style>
 :root{--bg:#0b0d17;--panel:#141831;--line:#2a3060;--txt:#e6e8ff;--mut:#9aa0c8;--acc:#7c5cff;--ok:#33d17a;--bad:#ff5c7a;--pub:#ffb547}
 *{box-sizing:border-box}body{margin:0;font:15px/1.45 system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--txt)}
@@ -17,12 +17,12 @@ input{background:#0f1226;color:var(--txt);border:1px solid var(--line);border-ra
 button{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:7px 12px;font:inherit;cursor:pointer;margin-top:6px}
 .status{font-size:13px;color:var(--mut)}footer{padding:8px 28px 24px;color:var(--mut);font-size:13px}
 </style></head><body>
-<header><h1>Punch<span>card</span> · live on Midnight <i>preview</i></h1>
-<p>This page reads the <b>deployed</b> Punchcard contracts straight from the public Midnight indexer
+<header><h1>Punch<span>card</span> · on Midnight <i>preview</i></h1>
+<p>This page looks up the deployed Punchcard contracts on the public Midnight indexer
 (<code>indexer.preview.midnight.network</code>) and decodes their ledger in your browser with the compiled contract.
-Nothing here is mocked. Everything below is public: notice that nothing on chain links a payment to a buyer or to a bundle.
+If they are on chain, what you see is live. If not, it says so and shows the recorded run.
 <br><a href="../">← interactive demo (local simulator)</a> · <span class="status" id="status">loading…</span></p></header>
 <main id="main"></main>
-<footer>Punchcard · Apache-2.0 · Contract compiled with Compact 0.31.1 (ledger 8, the version the public networks run) · decoded with compact-runtime 0.16.0. Written by an AI agent for a human entrant.</footer>
+<footer>Punchcard · Apache-2.0 · Contract compiled with Compact 0.31.1 (ledger 8, what preview ran when this was deployed) · decoded with compact-runtime 0.16.0. Written by an AI agent for a human entrant.</footer>
 <script type="module" src="./live.mjs"></script>
 </body></html>

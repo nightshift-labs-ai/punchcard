@@ -71,6 +71,22 @@ async function load() {
     };
     st.textContent = `live · read ${new Date().toLocaleTimeString()} · refreshes every 30 s`;
     st.dataset.ok = "1";
-  } catch (e) { st.innerHTML = `<span class="bad">indexer error: ${esc(e.message)}</span> (retrying)`; }
+  } catch (e) {
+    if (e.message === "contract not found") { showRecord(st); return; }
+    st.innerHTML = `<span class="bad">indexer error: ${esc(e.message)}</span> (retrying)`;
+  }
+}
+// The preview network was reset after these contracts were deployed: say so and show what was recorded at the time.
+let recordShown = false;
+function showRecord(st) {
+  if (recordShown) return;
+  recordShown = true;
+  st.innerHTML = `<span class="bad">contracts not on the current preview chain</span>`;
+  const rows = deployment.steps.filter((s) => s.block || s.result).map((s) => `<tr><td>${esc(s.step)}</td><td>${esc(s.block ?? s.result)}</td><td><code>${esc(s.txId ?? "")}</code></td></tr>`).join("");
+  document.getElementById("main").innerHTML = `<section class="wide"><h2>What happened</h2>
+    <p>Midnight's public preview network was reset around Nov 7, 2026 (block heights restarted) and now runs ledger 9.1. The contracts deployed on Nov 6 no longer exist there. This page can only read a contract that is on chain, so it now shows the record of the run instead of live state. The transactions below can no longer be looked up.</p>
+    <p class="sub">The contract logic still runs in the <a href="../">interactive demo</a> (compiled contract on the local simulator).</p></section>
+    <section class="wide"><h2>Recorded run, Nov 6, 2026 (contract ${esc(deployment.address)})</h2>
+    <table><tr><th>Step</th><th>Block or result</th><th>Transaction</th></tr>${rows}</table></section>`;
 }
 load(); setInterval(() => { if (!document.activeElement || document.activeElement.id !== "nf") load(); }, 30000);

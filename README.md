@@ -8,13 +8,13 @@ endpoint, how often, and when. For an agent that is a full leak of its strategy.
 
 > **Name note:** this project was called *Nightpass* until Nov 6, 2026. We renamed it because another Midnight Buildathon team already has an
 > unrelated project called *NightPass* (Wave 1, membership access control). Hash domain tags inside the contract (`"nightpass:*"`) and a few
-> deploy-script storage names (and the compiled `deploy/managed` artifacts that match the deployed verifier keys) keep the old codename so the contract already deployed on preview stays valid.
+> deploy-script storage names (and the compiled `deploy/managed` artifacts that match the deployed verifier keys) keep the old codename so they match the verifier keys of the Nov 6 preview deployment.
 
 **Punchcard** lets an agent buy a bundle of *N* calls once, then pay each call with a
 zero-knowledge proof on Midnight. The provider learns *"this call was paid by a valid, unspent
 credit"* — never which bundle, which buyer, or how many credits are left.
 
-**Live demo:** https://punchcard-demo.nightshift-labs.workers.dev (the compiled contract running in the browser on the local Midnight simulator) · **Live chain view:** https://punchcard-demo.nightshift-labs.workers.dev/live/ (reads the deployed contracts from the public preview indexer and decodes their ledger in the browser) · Slides: [`docs/punchcard-slides.pdf`](docs/punchcard-slides.pdf) · Video (2.5 min, voice-over + subtitles): [`docs/punchcard-demo.mp4`](docs/punchcard-demo.mp4)
+**Live demo:** https://punchcard-demo.nightshift-labs.workers.dev (the compiled contract running in the browser on the local Midnight simulator) · **Chain view:** https://punchcard-demo.nightshift-labs.workers.dev/live/ (the Nov 6 preview deployment was removed by a network reset, see below; the page shows the recorded run) · Slides: [`docs/punchcard-slides.pdf`](docs/punchcard-slides.pdf) · Video (2.5 min, voice-over + subtitles): [`docs/punchcard-demo.mp4`](docs/punchcard-demo.mp4)
 
 ## How it works (dual-ledger model)
 
@@ -113,7 +113,9 @@ Public Midnight networks run ledger 8, so `deploy/` pins Compact 0.31.1, compact
 (the root project uses the newest compiler, 0.36, for local tests). `deploy/src/deploy.mjs` syncs a wallet, registers NIGHT for DUST,
 deploys (default `preview`), then runs issue → redeem → rejected double spend → redeem → buy → withdraw on-chain. `deploy/test-ledger8.sh` runs the 16 contract tests on the ledger-8 build (all pass).
 
-## Live on the public Midnight `preview` network
+## Deployed on the public Midnight `preview` network (Nov 6, 2026)
+
+> **Status, Nov 9, 2026:** Midnight's public preview network was reset around Nov 7, 2026 (block heights restarted) and now runs ledger 9.1. The contracts deployed on Nov 6 no longer exist there. The results below are the record of that run; the transactions can no longer be looked up. The deployment scripts are pinned to ledger 8, so a new deployment needs them moved to ledger 9 first. The contract and its tests are unaffected.
 Contract **`152c84984494587b0a2b58b3ab2e17eae612c1be5ce7c8fc254bfdf7134056b3`** (deployed with `deploy/src/deploy.mjs`, real proofs, Compact 0.31.1 / ledger 8).
 
 | Step | Block on preview |
@@ -128,7 +130,7 @@ Contract **`152c84984494587b0a2b58b3ab2e17eae612c1be5ce7c8fc254bfdf7134056b3`** 
 
 Tx ids: [`docs/preview-run.txt`](docs/preview-run.txt), [`docs/preview-deployment.json`](docs/preview-deployment.json).
 
-**Live chain view** — https://punchcard-demo.nightshift-labs.workers.dev/live/ (`deploy/live-web/`, built by `deploy.sh`):
+**Chain view** (shows the recorded run while the contracts are not on chain) — https://punchcard-demo.nightshift-labs.workers.dev/live/ (`deploy/live-web/`, built by `deploy.sh`):
 the browser queries `indexer.preview.midnight.network` (GraphQL `contractAction`), deserializes the contract state with
 `compact-runtime` 0.16 and decodes it with the compiled ledger-8 contract (`deploy/managed`). It shows both deployed
 contracts' counters, Merkle root of bundle commitments, every spent nullifier → request ticket, the sealed operator key, and
