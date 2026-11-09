@@ -109,9 +109,9 @@ HTTP gate: 402 → 200, replay 403, **chain watcher can't front-run a paid call*
 Replaying the header gives `403`; an old nullifier can't pay a new nonce. Nonces are **stateless** (`expiry ‖ random ‖ HMAC(serverKey, …)`, default lifetime 10 min, long enough for proving + block inclusion + indexer lag), so the server stores nothing per `402` and a request flood cannot evict a nonce an agent is paying for; only served nonces are kept (until they expire), and a nonce being checked is locked, so concurrent copies of one header get one `200`. The same gate reads `tickets` from the Midnight indexer in production (verified on a real chain, see below).
 
 ## Deploying to a public network — `deploy/`
-Public Midnight networks run ledger 8, so `deploy/` pins Compact 0.31.1, compact-runtime 0.16.0, Midnight.js 4.1.1 and proof server 8.1.3
+When this was deployed (Nov 6, 2026) public Midnight networks ran ledger 8, so `deploy/` pins Compact 0.31.1, compact-runtime 0.16.0, Midnight.js 4.1.1 and proof server 8.1.3
 (the root project uses the newest compiler, 0.36, for local tests). `deploy/src/deploy.mjs` syncs a wallet, registers NIGHT for DUST,
-deploys (default `preview`), then runs issue → redeem → rejected double spend → redeem → buy → withdraw on-chain. `deploy/test-ledger8.sh` runs the 16 contract tests on the ledger-8 build (all pass).
+deploys (default `preview`), then runs issue → redeem → rejected double spend → redeem → buy → withdraw on-chain. `deploy/test-ledger8.sh` runs the 16 contract tests on the ledger-8 build (all pass). Preview has since moved to ledger 9.1 and these pins have not been ported; the contract itself compiles with Compact 0.36.0.
 
 ## Deployed on the public Midnight `preview` network (Nov 6, 2026)
 
