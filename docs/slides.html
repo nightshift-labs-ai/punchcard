@@ -40,7 +40,7 @@ img{max-width:100%;max-height:470px;border-radius:12px;border:1px solid #2a3060}
 <li class="g">✔ only the operator can <code>issue()</code> / <code>withdraw()</code>; <code>buy()</code> must pay N × price NIGHT</li></ul>
 <p class="m">21 tests (16 contract + 5 HTTP paywall) cover every rule plus unlinkability, front-running, request binding and concurrent replays — all passing.</p></div>
 
-<div class="s"><h2>Live on the public Midnight preview network</h2><table>
+<div class="s"><h2>Ran on the public Midnight preview network (Nov 6)</h2><p class="m" style="font-size:20px;margin:0 0 10px">Preview was reset around Nov 7, so these contracts are no longer on chain; this is the recorded run.</p><table>
 <tr><th>Step (real ZK proofs, preview network)</th><th>Result</th></tr>
 <tr><td>deploy, price 1000 / credit</td><td class="g">contract 152c8498…56b3</td></tr>
 <tr><td><code>issue(ownerTag, 3)</code></td><td class="g">block 1618076</td></tr>
@@ -65,7 +65,7 @@ img{max-width:100%;max-height:470px;border-radius:12px;border:1px solid #2a3060}
 <li><b>Why now:</b> agent-to-API payments (x402) are growing; privacy is the missing piece.</li>
 <li><b>Adoption path:</b> drop-in <code>X-Punchcard</code> header next to x402; we run our own paid agent API and will accept Punchcard first.</li>
 <li><b>Model:</b> providers keep 100% of the bundle price; optional hosted verifier.</li>
-<li><b>Pilot (ours, live):</b> Nightshift x402 API — 18 paid endpoints at $0.003–0.01 per call, listed on x402scan. Plan: also sell 100- and 1,000-call Punchcard bundles at the same per-call price.</li>
+<li><b>Pilot (ours, live):</b> Nightshift x402 API — 21 paid endpoints at $0.003 per call, listed on x402scan. Plan: also sell 100- and 1,000-call Punchcard bundles at the same per-call price.</li>
 <li><b>Why a bundle, not per-call x402:</b> one purchase instead of N public payments; each call costs a redeem fee in DUST, not a USDC transfer.</li></ul></div>
 
 <div class="s"><h2>Roadmap &amp; honest limits</h2><ul>
