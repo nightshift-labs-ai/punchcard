@@ -64,8 +64,8 @@ export circuit redeem(requestTag: Bytes<32>): Bytes<32> {
 }
 ```
 
-Every `disclose()` is deliberate: the Merkle root, the nullifier and the request tag. The secret, the bundle size, the path
-and the index never leave the agent.
+Every `disclose()` in `redeem` is deliberate: the Merkle root, the nullifier and the request tag. The secret, the path and the
+index never leave the agent. The bundle size is not revealed when spending; it is visible at purchase (`buy` and `issue` take it as an argument).
 
 ```
 agent                          API server                     Midnight
@@ -86,14 +86,17 @@ compact compile contract/punchcard.compact contract/managed     # real ZK keys (
 npm test                                                        # 21 tests (16 contract + 5 HTTP paywall)
 node src/demo.mjs                                               # end-to-end story in the local simulator
 npx vite --config vite.config.mjs                               # browser demo (web/) on localhost
+npm i --no-save playwright && npx playwright install chromium  # only for the headless UI test below
 node tools/uitest.mjs <url>                                     # headless UI test (Playwright)
 ```
 
-## Circuit size (measured, `compact compile` without `--skip-zk`)
+## Circuit size (measured, Compact 0.36.0, `compact compile` without `--skip-zk`)
 | Circuit | ZKIR instructions | Prover key | Verifier key |
 |---|---|---|---|
-| `issue` | 114 | 11.3 MB | 2.1 kB |
-| `redeem` (Merkle depth 16 + 2 hashes + set/map updates) | 246 | 22.6 MB | 2.1 kB |
+| `issue` | 46 | 22.5 MB | 2.1 kB |
+| `buy` | 52 | 11.3 MB | 2.1 kB |
+| `redeem` (Merkle depth 16 + 2 hashes + set/map updates) | 159 | 45.1 MB | 2.1 kB |
+| `withdraw` | 66 | 11.3 MB | 2.1 kB |
 
 Depth 16 allows 65,536 bundles per contract; raising it grows `redeem` linearly in the path length.
 
@@ -111,7 +114,7 @@ Replaying the header gives `403`; an old nullifier can't pay a new nonce. Nonces
 ## Deploying to a public network — `deploy/`
 When this was deployed (Nov 6, 2026) public Midnight networks ran ledger 8, so `deploy/` pins Compact 0.31.1, compact-runtime 0.16.0, Midnight.js 4.1.1 and proof server 8.1.3
 (the root project uses the newest compiler, 0.36, for local tests). `deploy/src/deploy.mjs` syncs a wallet, registers NIGHT for DUST,
-deploys (default `preview`), then runs issue → redeem → rejected double spend → redeem → buy → withdraw on-chain. `deploy/test-ledger8.sh` runs the 16 contract tests on the ledger-8 build (all pass). Preview has since moved to ledger 9.1 and these pins have not been ported; the contract itself compiles with Compact 0.36.0.
+deploys (default `preview`), then runs issue → redeem → rejected double spend → redeem → buy → withdraw on-chain. `(cd deploy && npm ci) && bash deploy/test-ledger8.sh` runs the 16 contract tests on the ledger-8 build (all pass). Preview has since moved to ledger 9.1 and these pins have not been ported; the contract itself compiles with Compact 0.36.0.
 
 ## Deployed on the public Midnight `preview` network (Nov 6, 2026)
 
@@ -130,12 +133,12 @@ Contract **`152c84984494587b0a2b58b3ab2e17eae612c1be5ce7c8fc254bfdf7134056b3`** 
 
 Tx ids: [`docs/preview-run.txt`](docs/preview-run.txt), [`docs/preview-deployment.json`](docs/preview-deployment.json).
 
-**Chain view** (shows the recorded run while the contracts are not on chain) — https://punchcard-demo.nightshift-labs.workers.dev/live/ (`deploy/live-web/`, built by `deploy.sh`):
-the browser queries `indexer.preview.midnight.network` (GraphQL `contractAction`), deserializes the contract state with
-`compact-runtime` 0.16 and decodes it with the compiled ledger-8 contract (`deploy/managed`). It shows both deployed
-contracts' counters, Merkle root of bundle commitments, every spent nullifier → request ticket, the sealed operator key, and
-the contract's NIGHT balance (500 = 2000 paid by `buy()` − 1500 withdrawn). A "check a nullifier" box runs the same
-`spent.member()` test the API gate uses. Headless test: `node tools/livetest.mjs <url>/live/`.
+**Chain view** — https://punchcard-demo.nightshift-labs.workers.dev/live/ (`deploy/live-web/`, built by `deploy.sh`): the page asks
+`indexer.preview.midnight.network` (GraphQL `contractAction`) for both contracts. They are gone since the reset, so it says so and shows
+the recorded run: each step with its block and transaction, from `docs/preview-deployment.json`. While the contracts were on chain the
+same page deserialized their state with `compact-runtime` 0.16 and decoded it with the compiled ledger-8 contract (counters, Merkle root,
+spent nullifiers and tickets, a nullifier checker, the NIGHT balance); `docs/live-view.png` is a screenshot from that time and is the only
+remaining evidence for the 500-unit balance. Headless test: `node tools/livetest.mjs <url>/live/` (needs Playwright, as above).
 
 ## Verified on a real Midnight chain (local `undeployed` network, real ZK proofs)
 `deploy/src/deploy.mjs` with `MIDNIGHT_NETWORK=undeployed` ran the full flow against a local Midnight node 1.0.0 + indexer 4.3.3 +
@@ -154,7 +157,8 @@ Transcript: [`docs/localnet-run.txt`](docs/localnet-run.txt), block numbers + tx
 | final public ledger | `bundlesIssued=2 creditsRedeemed=2`, 2 nullifiers, 2 tickets |
 
 To reproduce: start a local network (Midnight's `standalone.yml`: node, indexer, proof server), then
-`cd deploy && MIDNIGHT_NETWORK=undeployed WALLET_SEED=<genesis seed 00…01> node src/deploy.mjs`.
+`cd deploy && npm ci && npm run compile` (Compact 0.31.1 with real keys; a fresh clone has none), then
+`MIDNIGHT_NETWORK=undeployed WALLET_SEED=<genesis seed 00…01> node src/deploy.mjs`.
 Note: calls that move unshielded NIGHT (`buy`) need the balancing recipe signed with the unshielded key (`wallet.signRecipe`), otherwise the node rejects the transaction (error 192).
 
 ### HTTP paywall paid by real on-chain proofs
@@ -185,7 +189,7 @@ Private payments and access for agents is an active area on Midnight. Projects w
 - **Sigil**: private authorization policies for agents (policy commitment + per-request nullifiers).
 
 What Punchcard does differently: the agent **prepays a bundle of N credits once** (self-serve `buy()` in NIGHT, or `issue()` after an off-chain x402 payment);
-the bundle commitment is **computed inside the circuit**, so nobody can mint a bigger bundle than was paid; each call spends one **per-index nullifier
+the bundle commitment is **computed inside the circuit**, so no agent can mint a bigger bundle than it paid for (`issue` trusts the operator); each call spends one **per-index nullifier
 bound to the request** (`requestTag = sha256(nonce ‖ claim)`), so a copied header cannot be front-run; and the provider keeps **no per-agent state**
 and sends **no settlement transaction per call**. It just checks the public ledger in its HTTP 402 gate. There is also **no custodian**: how many credits a bundle has left is not reported by a backend. The circuit enforces it (`i < uses` plus a unique nullifier per index), so neither the operator nor the provider holds agent balances. No code from the projects above is used.
 
@@ -202,12 +206,12 @@ and sends **no settlement transaction per call**. It just checks the public ledg
 - `buy()` uses an unshielded NIGHT payment, so the purchase itself is public (who bought how many); unlinkability starts after it. Roadmap: shielded payment.
 
 ## Adoption
-First adopter: our own live x402 API (https://nightshift-x402.nightshift-labs.workers.dev, 18 paid endpoints at $0.003–0.01 per call, listed on x402scan).
+First adopter: our own live x402 API (https://nightshift-x402.nightshift-labs.workers.dev, 21 paid endpoints at $0.003 per call, listed on x402scan).
 Plan: sell 100- and 1,000-call Punchcard bundles at the same per-call price next to the x402 per-call option; agents that want unlinkable usage pick the bundle.
 Providers keep the whole bundle price; a hosted verifier (indexer read + gate) is an optional paid service.
 
 ## Roadmap
-1. Browser UI with Lace wallet against the preview deployment.
+1. Redeploy on the current preview network, then a browser UI with Lace wallet against it.
 2. Shielded payment in `buy()` so the purchase is private too.
 3. Package the gate (already verified against the preview indexer) as drop-in middleware next to x402 (Express / Hono / Workers).
 4. Bundle expiry and per-endpoint credit classes.

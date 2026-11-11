@@ -82,6 +82,7 @@ function showRecord(st) {
   if (recordShown) return;
   recordShown = true;
   st.innerHTML = `<span class="bad">contracts not on the current preview chain</span>`;
+  st.dataset.record = "1";
   const rows = deployment.steps.filter((s) => s.block || s.result).map((s) => `<tr><td>${esc(s.step)}</td><td>${esc(s.block ?? s.result)}</td><td><code>${esc(s.txId ?? "")}</code></td></tr>`).join("");
   document.getElementById("main").innerHTML = `<section class="wide"><h2>What happened</h2>
     <p>Midnight's public preview network was reset around Nov 7, 2026 (block heights restarted) and now runs ledger 9.1. The contracts deployed on Nov 6 no longer exist there. This page can only read a contract that is on chain, so it now shows the record of the run instead of live state. The transactions below can no longer be looked up.</p>

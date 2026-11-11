@@ -1,5 +1,5 @@
 // Headless browser smoke test of the demo UI: buy, pay, cheat x3, screenshot.
-import { chromium } from "/home/agent/tools/pw/node_modules/playwright/index.mjs";
+const { chromium } = await import(process.env.PW_MODULE || "playwright");
 const url = process.argv[2] ?? "http://127.0.0.1:8765/";
 const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1360, height: 900 } });
 const errs = []; p.on("pageerror", (e) => errs.push(e.message)); p.on("console", (m) => m.type() === "error" && errs.push(m.text()));

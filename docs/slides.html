@@ -49,7 +49,7 @@ img{max-width:100%;max-height:470px;border-radius:12px;border:1px solid #2a3060}
 <tr><td><code>redeem</code> credit #1</td><td class="g">block 1618085</td></tr>
 <tr><td><code>buy(ownerTag, 2)</code> paying 2000 NIGHT units</td><td class="g">block 1618089</td></tr>
 <tr><td><code>withdraw(1500)</code> (in-circuit balance check)</td><td class="g">block 1618093</td></tr></table>
-<p class="m" style="font-size:20px">Also on preview (contract 6ba402…) and a local chain: HTTP paywall reading the indexer: 402 → on-chain redeem → <span class="g">200</span>; two concurrent copies → one 200; ticket replayed without the claim → 402; replay → 403.<br>Chain view of the recorded run (decodes the deployed ledger from the public indexer in your browser): punchcard-demo.nightshift-labs.workers.dev/live — contract balance 500 NIGHT units = 2000 bought − 1500 withdrawn.</p></div>
+<p class="m" style="font-size:20px">Also on preview (contract 6ba402…) and a local chain: HTTP paywall reading the indexer: 402 → on-chain redeem → <span class="g">200</span>; two concurrent copies → one 200; ticket replayed without the claim → 402; replay → 403.<br>Chain view of the recorded run, step by step with blocks and transactions: punchcard-demo.nightshift-labs.workers.dev/live</p></div>
 
 <div class="s"><h2>Demo</h2><img src="demo-ui.png"><p class="m" style="font-size:20px">Live: punchcard-demo.nightshift-labs.workers.dev — the compiled contract running in the browser (local Midnight simulator), with three "try to cheat" buttons.</p></div>
 
@@ -69,7 +69,7 @@ img{max-width:100%;max-height:470px;border-radius:12px;border:1px solid #2a3060}
 <li><b>Why a bundle, not per-call x402:</b> one purchase instead of N public payments; each call costs a redeem fee in DUST, not a USDC transfer.</li></ul></div>
 
 <div class="s"><h2>Roadmap &amp; honest limits</h2><ul>
-<li>Next: Lace wallet in the UI so agents can redeem against the live preview contract from the page (read-only live view already shipped).</li>
+<li>Next: redeploy on the current preview network, then a Lace wallet in the UI so agents can redeem from the page.</li>
 <li>Shielded payment inside the purchase, so buying is private too.</li>
 <li>Package the gate (verified against the preview indexer) as drop-in middleware next to x402.</li>
 <li>Bundle expiry, per-endpoint credit classes.</li>

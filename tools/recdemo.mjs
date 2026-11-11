@@ -1,5 +1,5 @@
 // Record the live demo UI with scripted clicks → WebM, then slides → PNGs. Used to build the pitch video.
-import { chromium } from "/home/agent/tools/pw/node_modules/playwright/index.mjs";
+const { chromium } = await import(process.env.PW_MODULE || "playwright");
 import fs from "node:fs";
 const [url, outDir] = process.argv.slice(2); fs.mkdirSync(outDir, { recursive: true });
 const b = await chromium.launch();

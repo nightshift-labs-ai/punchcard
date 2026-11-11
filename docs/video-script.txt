@@ -7,11 +7,11 @@
 42| Public state lives in a historic Merkle tree, a set of nullifiers, and a ticket map.
 48| The secret, the bundle size, and the Merkle path stay in the agent's private state, supplied as witnesses.
 55| The circuit builds the commitment itself, checks the Merkle root, the use count, and the nullifier. Twenty one tests pass.
-62.5| And it is live on the public Midnight preview network: issue, two anonymous redeems, a rejected double spend, a self-serve purchase in NIGHT, and a withdrawal, all with real proofs.
-74.5| Here is the live demo. The agent buys five calls. The ledger shows one unreadable commitment.
+62.5| It ran on the public Midnight preview network on November sixth: issue, two anonymous redeems, a rejected double spend, a self-serve purchase in NIGHT, and a withdrawal, all with real proofs.
+74.5| Here is the demo. The agent buys five calls. The ledger shows one unreadable commitment.
 81| Each call is paid by a proof. The server gets a fresh nullifier, and serves the request, without knowing the payer.
 91.5| Now let's cheat. Re-spending a credit fails. Claiming a hundred uses fails.
 101| And spending a bundle nobody paid for is rejected by the circuit too.
-107.5| This page reads the deployed contracts from the public Midnight indexer, and decodes their ledger right in the browser. Anyone can check a nullifier. The contract state never links it to a buyer.
+107.5| This page shows that recorded run, step by step, with its blocks and transactions. Preview has since been reset, so those contracts are no longer on chain.
 120.5| Who pays? Providers that sell data to agents. Punchcard plugs in next to x four oh two payments, as one extra header.
 134.5| Next: a Lace wallet in the browser, a shielded purchase, and server middleware. Punchcard is open source, under Apache 2.0.

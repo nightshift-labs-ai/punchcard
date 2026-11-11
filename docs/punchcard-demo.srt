@@ -1,68 +1,68 @@
 1
-00:00:00,500 --> 00:00:05,514
+00:00:00,500 --> 00:00:05,444
 Punchcard: private, prepaid credits for autonomous agents that buy data services, built on Midnight.
 
 2
-00:00:08,500 --> 00:00:13,525
+00:00:08,500 --> 00:00:13,827
 Software agents now pay for each service call, one by one. But every paid call is linkable.
 
 3
-00:00:14,000 --> 00:00:18,387
+00:00:14,000 --> 00:00:18,155
 The provider sees which agent called what, and when. For an agent, that log is its strategy.
 
 4
-00:00:21,500 --> 00:00:26,595
+00:00:21,500 --> 00:00:26,131
 With Punchcard, an agent buys a bundle of calls once. The chain stores only a hiding commitment.
 
 5
-00:00:28,500 --> 00:00:33,746
+00:00:28,500 --> 00:00:33,874
 Each call is then paid with a zero knowledge proof: I own an unused credit, in some bundle, in this tree.
 
 6
-00:00:36,000 --> 00:00:40,468
+00:00:36,000 --> 00:00:40,050
 A nullifier stops double spending, and the server's request code is bound to the payment.
 
 7
-00:00:42,000 --> 00:00:46,120
+00:00:42,000 --> 00:00:45,957
 Public state lives in a historic Merkle tree, a set of nullifiers, and a ticket map.
 
 8
-00:00:48,000 --> 00:00:53,850
+00:00:48,000 --> 00:00:53,176
 The secret, the bundle size, and the Merkle path stay in the agent's private state, supplied as witnesses.
 
 9
-00:00:55,000 --> 00:01:00,850
+00:00:55,000 --> 00:01:00,652
 The circuit builds the commitment itself, checks the Merkle root, the use count, and the nullifier. Twenty one tests pass.
 
 10
-00:01:02,500 --> 00:01:11,960
-And it is live on the public Midnight preview network: issue, two anonymous redeems, a rejected double spend, a self-serve purchase in NIGHT, and a withdrawal, all with real proofs.
+00:01:02,500 --> 00:01:12,924
+It ran on the public Midnight preview network on November sixth: issue, two anonymous redeems, a rejected double spend, a self-serve purchase in NIGHT, and a withdrawal, all with real proofs.
 
 11
-00:01:14,500 --> 00:01:19,154
-Here is the live demo. The agent buys five calls. The ledger shows one unreadable commitment.
+00:01:14,500 --> 00:01:18,922
+Here is the demo. The agent buys five calls. The ledger shows one unreadable commitment.
 
 12
-00:01:21,000 --> 00:01:26,234
+00:01:21,000 --> 00:01:26,792
 Each call is paid by a proof. The server gets a fresh nullifier, and serves the request, without knowing the payer.
 
 13
-00:01:31,500 --> 00:01:35,550
+00:01:31,500 --> 00:01:35,504
 Now let's cheat. Re-spending a credit fails. Claiming a hundred uses fails.
 
 14
-00:01:41,000 --> 00:01:44,168
+00:01:41,000 --> 00:01:44,214
 And spending a bundle nobody paid for is rejected by the circuit too.
 
 15
-00:01:47,500 --> 00:01:56,542
-This page reads the deployed contracts from the public Midnight indexer, and decodes their ledger right in the browser. Anyone can check a nullifier. The contract state never links it to a buyer.
+00:01:47,500 --> 00:01:55,196
+This page shows that recorded run, step by step, with its blocks and transactions. Preview has since been reset, so those contracts are no longer on chain.
 
 16
-00:02:00,500 --> 00:02:06,361
+00:02:00,500 --> 00:02:06,500
 Who pays? Providers that sell data to agents. Punchcard plugs in next to x402 payments, as one extra header.
 
 17
-00:02:14,500 --> 00:02:21,127
+00:02:14,500 --> 00:02:20,930
 Next: a Lace wallet in the browser, a shielded purchase, and server middleware. Punchcard is open source, under Apache 2.0.
 
